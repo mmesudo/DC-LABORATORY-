@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-C laboratory | Proyectos</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+        :root{
+            --fondo:#020205;
+            --panel:#080a15;
+            --borde:#0f1a30;
+            --azul-oscuro:#003366;
+            --azul-neon:#00ccff;
+            --azul-brillo:#33eeff;
+            --texto:#e0f0ff;
+            --texto-tenue:#88b0d0;
+        }
+        body{
+            color:var(--texto);
+            min-height:100vh;
+            padding:40px 20px;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(0,204,255,.12) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(0,204,255,.08) 0%, transparent 50%),
+                linear-gradient(180deg,#020205,#050810);
+            position:relative;
+            overflow-x:hidden;
+        }
+        .neon-bg{
+            position:fixed;
+            inset:0;
+            z-index:-1;
+            opacity:.55;
+            background:
+                radial-gradient(circle at var(--x1, 20%) var(--y1, 30%), rgba(0,204,255,.14) 0%, transparent 45%),
+                radial-gradient(circle at var(--x2, 80%) var(--y2, 20%), rgba(0,204,255,.10) 0%, transparent 50%),
+                radial-gradient(circle at var(--x3, 50%) var(--y3, 80%), rgba(0,204,255,.08) 0%, transparent 55%),
+                radial-gradient(circle at var(--x4, 10%) var(--y4, 70%), rgba(0,204,255,.12) 0%, transparent 40%),
+                radial-gradient(circle at var(--x5, 90%) var(--y5, 90%), rgba(0,204,255,.09) 0%, transparent 60%);
+            animation:neonShape 18s ease-in-out infinite alternate;
+        }
+        .neon-line{
+            position:fixed;
+            inset:0;
+            z-index:-1;
+            opacity:.35;
+            background:
+                linear-gradient(90deg,transparent 49%,rgba(0,204,255,.03) 50%,transparent 51%),
+                linear-gradient(0deg,transparent 49%,rgba(0,204,255,.03) 50%,transparent 51%);
+            background-size:60px 60px;
+            animation:gridDrift 25s linear infinite;
+        }
+        .neon-waves{
+            position:fixed;
+            inset:0;
+            z-index:-1;
+            opacity:.45;
+            background:
+                repeating-linear-gradient(
+                    180deg,
+                    transparent,
+                    transparent 80px,
+                    rgba(0,204,255,.04) 80px,
+                    rgba(0,204,255,.04) 84px,
+                    transparent 84px,
+                    transparent 160px
+                );
+            animation:waveDrift 30s ease-in-out infinite alternate;
+        }
+        @keyframes neonShape{
+            0%{--x1:20%;--y1:30%;--x2:80%;--y2:20%;--x3:50%;--y3:80%;--x4:10%;--y4:70%;--x5:90%;--y5:90%;}
+            25%{--x1:35%;--y1:25%;--x2:70%;--y2:35%;--x3:60%;--y3:75%;--x4:15%;--y4:65%;--x5:85%;--y5:85%;}
+            50%{--x1:25%;--y1:45%;--x2:75%;--y2:28%;--x3:45%;--y3:85%;--x4:20%;--y4:80%;--x5:95%;--y5:75%;}
+            75%{--x1:40%;--y1:35%;--x2:65%;--y2:40%;--x3:55%;--y3:70%;--x4:8%;--y4:75%;--x5:88%;--y5:88%;}
+            100%{--x1:22%;--y1:28%;--x2:78%;--y2:22%;--x3:48%;--y3:78%;--x4:12%;--y4:68%;--x5:92%;--y5:92%;}
+        }
+        @keyframes gridDrift{
+            0%{transform:translate(0,0) scale(1);}
+            50%{transform:translate(15px,10px) scale(1.02);}
+            100%{transform:translate(0,0) scale(1);}
+        }
+        @keyframes waveDrift{
+            0%{transform:translateY(0) scaleX(1);}
+            50%{transform:translateY(-8px) scaleX(1.03);}
+            100%{transform:translateY(0) scaleX(1);}
+        }
+        .contenedor{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+        header{text-align:center;margin-bottom:60px}
+        .logo-img{max-width:480px;width:90%;margin-bottom:20px;border-radius:16px;box-shadow:0 0 30px rgba(0,204,255,.3);}
+        .subtitulo{color:var(--texto-tenue);font-size:1.1rem;letter-spacing:1px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:30px}
+        .tarjeta{background:var(--panel);border:1px solid var(--borde);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;}
+        .tarjeta:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(0,204,255,.2);border-color:var(--azul-neon);}
+        .foto-repo{width:100%;height:200px;object-fit:cover;background:#050810}
+        .cuerpo{padding:22px}
+        .nombre-proyecto{font-size:1.4rem;color:var(--azul-neon);margin-bottom:10px;text-shadow:0 0 8px rgba(0,204,255,.3)}
+        .descripcion{color:var(--texto-tenue);line-height:1.6;margin-bottom:22px}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;
+             background:linear-gradient(135deg,var(--azul-oscuro),var(--azul-neon));
+             color:#fff;font-weight:700;border-radius:10px;text-decoration:none;
+             box-shadow:0 0 12px rgba(0,204,255,.25);transition:all .3s}
+        .btn:hover{box-shadow:0 0 25px var(--azul-neon);transform:scale(1.03)}
+        .separador{height:1px;background:linear-gradient(90deg,transparent,var(--azul-neon),transparent);margin:50px 0;opacity:.4}
+        .seccion-servicios{margin-top:80px;margin-bottom:40px;text-align:center}
+        .titulo-seccion{font-size:2rem;color:var(--azul-neon);margin-bottom:40px;text-shadow:0 0 12px rgba(0,204,255,.3)}
+        .grid-servicios{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px}
+        .tarjeta-servicio{background:var(--panel);border:1px solid var(--borde);border-radius:14px;padding:30px 20px;transition:all .3s}
+        .tarjeta-servicio:hover{border-color:var(--azul-neon);transform:translateY(-5px);box-shadow:0 0 25px rgba(0,204,255,.15)}
+        .icono{font-size:2.5rem;margin-bottom:15px;display:inline-block}
+        .tarjeta-servicio h3{color:var(--azul-brillo);margin-bottom:12px;font-size:1.25rem}
+        .tarjeta-servicio p{color:var(--texto-tenue);line-height:1.6;margin-bottom:15px}
+        .btn-llamar{display:inline-block;margin-top:10px;padding:10px 24px;
+                      background:linear-gradient(135deg,var(--azul-oscuro),var(--azul-neon));
+                      color:#fff;font-weight:700;border-radius:8px;text-decoration:none;
+                      box-shadow:0 0 12px rgba(0,204,255,.25);transition:all .3s}
+        .btn-llamar:hover{box-shadow:0 0 25px var(--azul-neon);transform:scale(1.05)}
+        footer{text-align:center;color:#406080;font-size:.9rem;margin-top:60px;padding-bottom:40px}
+        .circuit-bg{
+            position:fixed;
+            inset:0;
+            z-index:-2;
+            opacity:.16;
+            -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M10 10 H90 V60 H150 V10 H210'/%3E%3Cpath d='M10 110 H60 V160 H110 V210'/%3E%3Cpath d='M130 90 H210 M170 90 V150 H210'/%3E%3Cpath d='M10 200 V180 H40'/%3E%3Ccircle cx='90' cy='60' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='150' cy='10' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='60' cy='160' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='170' cy='150' r='4' fill='black' stroke='none'/%3E%3Crect x='20' y='170' width='30' height='16' fill='none' stroke='black' stroke-width='2'/%3E%3Crect x='150' y='40' width='16' height='30' fill='none' stroke='black' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
+            mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M10 10 H90 V60 H150 V10 H210'/%3E%3Cpath d='M10 110 H60 V160 H110 V210'/%3E%3Cpath d='M130 90 H210 M170 90 V150 H210'/%3E%3Cpath d='M10 200 V180 H40'/%3E%3Ccircle cx='90' cy='60' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='150' cy='10' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='60' cy='160' r='4' fill='black' stroke='none'/%3E%3Ccircle cx='170' cy='150' r='4' fill='black' stroke='none'/%3E%3Crect x='20' y='170' width='30' height='16' fill='none' stroke='black' stroke-width='2'/%3E%3Crect x='150' y='40' width='16' height='30' fill='none' stroke='black' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
+            -webkit-mask-repeat:repeat;
+            mask-repeat:repeat;
+            -webkit-mask-size:220px 220px;
+            mask-size:220px 220px;
+            animation:circuitColor 30s ease-in-out infinite;
+        }
+        @keyframes circuitColor{
+            0%{background-color:#0066ff;}
+            33%{background-color:#ff2020;}
+            66%{background-color:#000000;}
+            100%{background-color:#0066ff;}
+        }
+        .musica-flotante{
+            width:54px;height:54px;
+            display:flex;align-items:center;justify-content:center;
+            border-radius:50%;
+            font-size:1.6rem;
+            cursor:pointer;
+            background:var(--panel);
+            border:1px solid var(--azul-neon);
+            box-shadow:0 0 14px rgba(0,204,255,.4);
+            transition:transform .25s, box-shadow .25s;
+        }
+        .musica-flotante:hover{transform:scale(1.12);box-shadow:0 0 25px var(--azul-neon)}
+        .icono-arrastrable{
+            position:fixed;
+            left:20px;
+            top:20px;
+            width:84px;height:84px;
+            border-radius:50%;
+            border:1px solid var(--azul-neon);
+            box-shadow:0 0 14px rgba(0,204,255,.4);
+            background:var(--panel);
+            display:flex;align-items:center;justify-content:center;
+            cursor:grab;
+            z-index:60;
+            touch-action:none;
+            user-select:none;
+            overflow:hidden;
+        }
+        .icono-arrastrable img{
+            width:100%;height:100%;
+            object-fit:cover;
+            pointer-events:none;
+        }
+        .icono-arrastrable:active{cursor:grabbing}
+        .flotantes{
+            position:fixed;
+            right:22px;
+            bottom:22px;
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+            z-index:50;
+        }
+        .flotantes a{
+            overflow:hidden;
+            width:54px;height:54px;
+            display:flex;align-items:center;justify-content:center;
+            border-radius:50%;
+            font-size:1.6rem;
+            text-decoration:none;
+            background:var(--panel);
+            border:1px solid var(--azul-neon);
+            box-shadow:0 0 14px rgba(0,204,255,.4);
+            transition:transform .25s, box-shadow .25s;
+        }
+        .flotantes a:hover{transform:scale(1.12);box-shadow:0 0 25px var(--azul-neon)}
+        .mapa-seccion{margin-top:60px;text-align:center}
+        .mapa-seccion iframe{
+            width:100%;
+            max-width:900px;
+            height:320px;
+            border:1px solid var(--borde);
+            border-radius:16px;
+            box-shadow:0 0 20px rgba(0,204,255,.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bg"></div>
+    <div class="circuit-bg"></div>
+    <div class="neon-line"></div>
+    <div class="neon-waves"></div>
+
+    <div class="contenedor">
+        <header>
+            <img src="logo.jpg" alt="D-C laboratory" class="logo-img">
+            <p class="subtitulo">PROYECTOS • REPOSITORIOS • DESCARGAS</p>
+        </header>
+
+        <div class="grid">
+            <div class="tarjeta">
+                <img src="laboratory.png" alt="DCG-laboratory — Bot WhatsApp" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">DCG-laboratory</h3>
+                    <p class="descripcion">Bot de WhatsApp — Automatización, descargas, IA, stickers, administración y herramientas. Todo en un solo asistente inteligente.</p>
+                    <a href="https://github.com/dcg2390/DCG-laboratory" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="DCECUELM327.jpg" alt="HC-ELM327" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">HC-ELM327</h3>
+                    <p class="descripcion">Fork nativo Android de AndrOBD para diagnóstico OBD-II vía ELM327: lectura de sensores en tiempo real, dashboard integrado y monitoreo completo del vehículo.</p>
+                    <a href="https://dcg0.github.io/DC-carECU/" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="DCstudio.png" alt="DC Tuner Studio" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">DC Tuner Studio</h3>
+                    <p class="descripcion">Estación profesional para telemetría y ajuste ECU en Windows y Linux 64-bit: sensores reales, gráficas, mapas y herramientas de diagnóstico para Speeduino, MegaSquirt y ELM327.</p>
+                    <a href="https://dcg0.github.io/DC-tuner-studio-site/" class="btn" target="_blank" rel="noopener noreferrer">⬇️ Abrir Página</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="dctunerrojo.jpg" alt="DCtunerRojo Studio" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">DCtunerRojo Studio</h3>
+                    <p class="descripcion">Estudio completo de calibración y monitoreo en tiempo real. Tablero digital, editor de mapas, lectura de sensores y control de ECU dedicado para motores VW y Speeduino.</p>
+                    <a href="https://github.com/dcg2390/DCtuneR" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="rojo.png" alt="ROJO" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">ROJO</h3>
+                    <p class="descripcion">Taller especializado en diseño, fabricación, reparación y monitoreo de motores de VW. Escapes personalizados, ECU, monitoreo en tiempo real de motor con software dedicado exclusivo.</p>
+                    <a href="https://rojo-taller.github.io/ROJO/" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="1789894913670.png" alt="S.I.D.C. Soluciones Integrales DC" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">S.I.D.C. / Soluciones Integrales DC</h3>
+                    <p class="descripcion">Sistema Integral de Diagnóstico y Control. Ingeniería aplicada para monitoreo, análisis y soluciones tecnológicas en tiempo real.</p>
+                    <a href="https://suministrosintegralesdc.github.io/SolucionesintegralesDC/" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="lucy.png" alt="LUCY" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">LUCY</h3>
+                    <p class="descripcion">Inteligencia artificial híbrida que controla la máquina de forma integral: funciona conectada a internet o de manera 100% offline, gestionando organización, comunicación, soporte y soluciones en un solo sistema.</p>
+                    <a href="https://dcg0.github.io/Lucy/" class="btn">⬇️ Descargar Lucy</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="dc-laboratory.jpg" alt="DCos" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">DCos</h3>
+                    <p class="descripcion">Plataforma de código abierto para orquestación y gestión de centros de datos: administración de clústeres, despliegue de servicios y monitoreo centralizado de infraestructura.</p>
+                    <a href="https://github.com/dcos/dcos" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+            <div class="tarjeta">
+                <img src="dcsgps.png" alt="DC-SGPS" class="foto-repo">
+                <div class="cuerpo">
+                    <h3 class="nombre-proyecto">DC-SGPS</h3>
+                    <p class="descripcion">Sistema de monitoreo de flotillas de autos y trailers en tiempo real: ubicación, velocidad, temperatura, estado del trailer y rutas recorridas. Funciona con el software DCSGPS y la app de Android Tracc Client.</p>
+                    <a href="https://github.com/dcg0/DC-SGPS-" class="btn" target="_blank">⬇️ Ver Proyecto</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="separador"></div>
+
+        <div class="seccion-servicios">
+            <h2 class="titulo-seccion">INFORMACIÓN • SERVICIOS</h2>
+            <div class="grid-servicios">
+                <div class="tarjeta-servicio">
+                    <span class="icono">🌐</span>
+                    <h3>Creación de Páginas Web</h3>
+                    <p>Diseño y desarrollo de sitios web profesionales, adaptables a móviles, con diseño moderno y tecnología de punta.</p>
+                    <a href="tel:8114895750" class="btn-llamar">📞 Solicitar — 8114895750</a>
+                </div>
+                <div class="tarjeta-servicio">
+                    <span class="icono">📱</span>
+                    <h3>Creación de Aplicaciones</h3>
+                    <p>Desarrollo de aplicaciones móviles y de escritorio a medida, funcionales y optimizadas para cada necesidad.</p>
+                    <a href="tel:8114895750" class="btn-llamar">📞 Solicitar — 8114895750</a>
+                </div>
+                <div class="tarjeta-servicio">
+                    <span class="icono">💻</span>
+                    <h3>Software Personalizado</h3>
+                    <p>Soluciones de software a la medida, sistemas de control, monitoreo y automatización para proyectos industriales y automotrices.</p>
+                    <a href="tel:8114895750" class="btn-llamar">📞 Solicitar — 8114895750</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mapa-seccion">
+            <h2 class="titulo-seccion">UBICACIÓN</h2>
+            <iframe src="https://www.google.com/maps?q=Monterrey,Nuevo%20Le%C3%B3n,M%C3%A9xico&output=embed" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <footer>
+            <p>D-C laboratory © 2026 — Código abierto • Innovación constante<br>
+               📞 Teléfono: <a href="tel:8114895750" style="color:#00ccff;text-decoration:none">8114895750</a></p>
+        </footer>
+    </div>
+
+    <div class="flotantes">
+        <a href="https://wa.me/528114895750" target="_blank" title="WhatsApp">💬</a>
+        <a href="mailto:ddcg0@dc.com" title="Correo">✉️</a>
+        <a href="https://github.com/dcg0" target="_blank" title="GitHub"><img src="github-icono.png" alt="GitHub" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></a>
+    </div>
+    <div class="icono-arrastrable" id="icono-arrastrable" title="Música">
+        <img src="icono-flotante.png" alt="DC">
+    </div>
+
+    <audio id="musica-fondo" src="musica.mp3" loop></audio>
+
+    <script>
+        (function(){
+            var el = document.getElementById('icono-arrastrable');
+            var audio = document.getElementById('musica-fondo');
+            var dragging = false, moved = false, offsetX = 0, offsetY = 0;
+
+            function start(x, y){
+                dragging = true;
+                moved = false;
+                var rect = el.getBoundingClientRect();
+                offsetX = x - rect.left;
+                offsetY = y - rect.top;
+            }
+            function move(x, y){
+                if(!dragging) return;
+                moved = true;
+                var nx = x - offsetX;
+                var ny = y - offsetY;
+                nx = Math.max(0, Math.min(window.innerWidth - el.offsetWidth, nx));
+                ny = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, ny));
+                el.style.left = nx + 'px';
+                el.style.top = ny + 'px';
+            }
+            function end(){
+                if(!dragging) return;
+                dragging = false;
+                if(!moved){
+                    if(audio.paused){ audio.play(); } else { audio.pause(); }
+                }
+            }
+
+            el.addEventListener('mousedown', function(e){ start(e.clientX, e.clientY); });
+            window.addEventListener('mousemove', function(e){ move(e.clientX, e.clientY); });
+            window.addEventListener('mouseup', end);
+
+            el.addEventListener('touchstart', function(e){
+                var t = e.touches[0];
+                start(t.clientX, t.clientY);
+            }, {passive:true});
+            window.addEventListener('touchmove', function(e){
+                var t = e.touches[0];
+                move(t.clientX, t.clientY);
+            }, {passive:true});
+            window.addEventListener('touchend', end);
+        })();
+    </script>
+</body>
+</html>
